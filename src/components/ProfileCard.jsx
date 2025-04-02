@@ -8,13 +8,20 @@ const ProfileCard = ({ profile}) => {
 
   const navigate = useNavigate();
 
-  const handleViewSummary = () => {
+  const handleViewSummary = (event) => {
+    event.stopPropagation();
     dispatch(setSelectedProfile(profile));
     navigate(`/profile`);
   };
+
+  const handleClick = () => {
+    dispatch(setSelectedProfile(profile));
+    navigate(`/user-details`);
+  }
   return (
     <div 
       onMouseEnter={() => dispatch(setSelectedProfile(profile))}
+      onClick={handleClick}
       className="relative bg-gray-100 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 w-80 text-center text-black">
       {/* Profile Image */}
       <div className="relative w-24 h-24 mx-auto">

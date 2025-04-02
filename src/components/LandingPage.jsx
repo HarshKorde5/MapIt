@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function LandingPage(){
+  const navigate = useNavigate();
+  const handleClick = () => {
+    // navigate(`/signup`);
+  }
     return(
         <>
 
@@ -17,7 +22,10 @@ function LandingPage(){
                     <a href="#" className="hover:text-black">GitHub</a>
                     <a href="#" className="hover:text-black">About Us</a>
                   </div>
-                  <button className="bg-orange-400 px-6 py-2 text-white rounded-lg hover:bg-orange-500">
+                  <button 
+                    onClick={handleClick}
+                    className="bg-orange-400 px-6 py-2 text-white rounded-lg hover:bg-orange-500"
+                  >
                     Sign Up
                   </button>
               </nav>

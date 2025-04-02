@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import MapComponent from "./MapComponent";
 import ProfileList from "./ProfileList";
 import {useSelector} from "react-redux";
-
+import { useNavigate } from "react-router-dom";
 
 function HomeComponent(){
     const [showFilters, setShowFilters] = useState(false);
@@ -62,6 +62,8 @@ function HomeComponent(){
     ]);
 
     const selectedProfile = useSelector((state) => state.profile.selectedProfile);
+    const [isHovered, setIsHovered] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <>
@@ -90,11 +92,12 @@ function HomeComponent(){
                                 alt="user settings"
                                 className="w-full h-full object-cover"
                             />
-                            
+
+                            {/* Hover dropdown */}
                             {isHovered && (
-                                <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-40 bg-white shadow-lg rounded-lg p-2 text-sm">
-                                    <p className="font-medium">View Profile</p>
-                                    <p className="text-gray-600">User Settings</p>
+                                <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-40 bg-white shadow-lg rounded-lg p-2 text-sm z-50 border border-gray-200">
+                                    <p className="font-medium text-gray-800 hover:text-blue-500 cursor-pointer">View Profile</p>
+                                    <p className="text-gray-600 hover:text-blue-500 cursor-pointer">User Settings</p>
                                 </div>
                             )}
                         </div>
