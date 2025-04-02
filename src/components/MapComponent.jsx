@@ -8,17 +8,13 @@ const containerStyle = {
   overflow: "hidden",
 };
 
-const center = {
-  lat: 18.5204, // Example: Pune
-  lng: 73.8567,
-};
 
-const MapComponent = () => {
+const MapComponent = ({lat, lng}) => {
   return (
     <div>
         <LoadScript googleMapsApiKey= {import.meta.env.VITE_MAP_API_KEY}>
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
-            <Marker position={center} />
+        <GoogleMap mapContainerStyle={containerStyle} center={{lat,lng}} zoom={12}>
+            <Marker position={{lat, lng}} />
         </GoogleMap>
         </LoadScript>
     </div>

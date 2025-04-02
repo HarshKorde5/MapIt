@@ -2,8 +2,68 @@ import React from "react";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import MapComponent from "./MapComponent";
+import ProfileList from "./ProfileList";
+import {useSelector} from "react-redux";
+
+
 function HomeComponent(){
     const [showFilters, setShowFilters] = useState(false);
+
+    const [profiles, setProfiles] = useState([
+            {
+              name: "John Doe",
+              location: "Pune",
+              image: "https://randomuser.me/api/portraits/men/32.jpg",
+              description: "Software Engineer at Google",
+              lat : 18.5204,
+              lng : 73.8567,
+            },
+            {
+              name: "Jane Smith",
+              location: "New York",
+              image: "https://randomuser.me/api/portraits/women/45.jpg",
+              description: "Product Designer at Apple",
+              lat : 40.7128,
+              lng : 74.0060,
+            },
+            {
+              name: "Alex Johnson",
+              location: "Los Angeles",
+              image: "https://randomuser.me/api/portraits/men/75.jpg",
+              description: "Data Scientist at Meta",
+              lat : 34.0549,
+              lng : 118.2426,
+            },
+            {
+              name: "Emily Davis",
+              location: "Seattle",
+              image: "https://randomuser.me/api/portraits/women/65.jpg",
+              description: "Marketing Manager at Amazon",
+              lat : 47.6061,
+              lng : 122.3328,
+            },
+            {
+              name: "Michael Brown",
+              location: "Chicago",
+              image: "https://randomuser.me/api/portraits/men/52.jpg",
+              description: "Cybersecurity Specialist at IBM",
+              lat : 41.8781,
+              lng : 87.6298,
+            },
+            {
+              name: "Sophia Wilson",
+              location: "Austin",
+              image: "https://randomuser.me/api/portraits/women/33.jpg",
+              description: "UX/UI Designer at Tesla",
+              lat : 30.2672,
+              lng : 97.7431,
+            },
+
+    ]);
+    const [hoveredLocation, setHoveredLocation] = useState({ lat: 18.5204, lng: 73.8567 });
+
+    const selectedProfile = useSelector((state) => state.profile.selectedProfile);
+
     return (
         <>
             <div className="flex h-screen">
@@ -41,7 +101,7 @@ function HomeComponent(){
                         {/* Main Content */}
                         <div className="flex-1 p-4 bg-white rounded-xl shadow-md">
                             {/* ProfileComponent */}
-                            Main Content Area
+                            <ProfileList profiles={profiles}/>
                             
                         </div>
                     </div>
@@ -50,7 +110,7 @@ function HomeComponent(){
                 {/* Right Section */}
                 <div className="w-1/4 bg-gray-100 mt-6 mr-6 mb-6 rounded-xl">
                     {/* MapComponent */}
-                    <MapComponent />
+                    <MapComponent lat={selectedProfile?.lat || 37.7749} lng={selectedProfile?.lng || -122.4194} />
                 </div>
                 </div>
         </>
