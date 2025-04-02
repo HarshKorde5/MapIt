@@ -1,4 +1,8 @@
 {
+  "admin": {
+    "username": "admin",
+    "password": "123"
+  },
   "profiles": [
     {
       "id": "1",
@@ -6,9 +10,16 @@
       "email": "john@example.com",
       "location": "Pune",
       "image": "https://randomuser.me/api/portraits/men/32.jpg",
-      "description": "Software Engineer at Google",
+      "description": "Adventure Traveler & Food Blogger",
       "lat": 18.5204,
-      "lng": 73.8567
+      "lng": 73.8567,
+      "contact": "+91 9876543210",
+      "dob": "1990-05-15",
+      "gender": "Male",
+      "age": 34,
+      "bio": "Exploring the world one bite at a time. Passionate about street food and hidden travel gems.",
+      "followers": 1532,
+      "following": 210
     },
     {
       "id": "2",
@@ -16,9 +27,16 @@
       "email": "jane@example.com",
       "location": "New York",
       "image": "https://randomuser.me/api/portraits/women/45.jpg",
-      "description": "Product Designer at Apple",
+      "description": "Travel Enthusiast & Urban Explorer",
       "lat": 40.7128,
-      "lng": 74.006
+      "lng": 74.006,
+      "contact": "+1 212-555-7890",
+      "dob": "1988-09-22",
+      "gender": "Female",
+      "age": 36,
+      "bio": "City lights and new sights! I love getting lost in new places, mapping unique experiences, and finding hidden gems.",
+      "followers": 2104,
+      "following": 325
     },
     {
       "id": "3",
@@ -26,9 +44,16 @@
       "email": "alex@example.com",
       "location": "Los Angeles",
       "image": "https://randomuser.me/api/portraits/men/75.jpg",
-      "description": "Data Scientist at Meta",
+      "description": "Backpacker & Travel Photographer",
       "lat": 34.0549,
-      "lng": 118.2426
+      "lng": 118.2426,
+      "contact": "+1 310-555-1234",
+      "dob": "1995-03-10",
+      "gender": "Male",
+      "age": 29,
+      "bio": "Wandering with my camera and a backpack. Capturing moments, cultures, and landscapes from around the world.",
+      "followers": 3456,
+      "following": 789
     },
     {
       "id": "4",
@@ -36,19 +61,33 @@
       "email": "emily@example.com",
       "location": "Seattle",
       "image": "https://randomuser.me/api/portraits/women/65.jpg",
-      "description": "Marketing Manager at Amazon",
+      "description": "Food Critic & Travel Writer",
       "lat": 47.6061,
-      "lng": 122.3328
+      "lng": 122.3328,
+      "contact": "+1 206-555-5678",
+      "dob": "1993-11-05",
+      "gender": "Female",
+      "age": 31,
+      "bio": "Tasting my way through different cultures. Food is my map to the world, and every meal tells a story.",
+      "followers": 1873,
+      "following": 245
     },
     {
       "id": "5",
       "name": "Michael Brown",
-      "email": "Michael@example.com",
+      "email": "michael@example.com",
       "location": "Chicago",
       "image": "https://randomuser.me/api/portraits/men/52.jpg",
-      "description": "Cybersecurity Specialist at IBM",
+      "description": "Explorer & Hiking Enthusiast",
       "lat": 41.8781,
-      "lng": 87.6298
+      "lng": 87.6298,
+      "contact": "+1 312-555-8765",
+      "dob": "1985-07-19",
+      "gender": "Male",
+      "age": 39,
+      "bio": "Mountains call, and I must go! Trekking, exploring maps, and discovering untouched places keeps me alive.",
+      "followers": 925,
+      "following": 134
     },
     {
       "id": "6",
@@ -56,16 +95,40 @@
       "email": "sophia@example.com",
       "location": "Austin",
       "image": "https://randomuser.me/api/portraits/women/33.jpg",
-      "description": "UX/UI Designer at Tesla",
+      "description": "Road Trip Lover & Cultural Explorer",
       "lat": 30.2672,
-      "lng": 97.7431
+      "lng": 97.7431,
+      "contact": "+1 512-555-4321",
+      "dob": "1997-12-01",
+      "gender": "Female",
+      "age": 27,
+      "bio": "Endless roads, new places, and amazing people! I live for the thrill of the unknown and the joy of discovery.",
+      "followers": 2678,
+      "following": 489
     },
     {
       "id": "7",
       "name": "Sharmaji Ka bada Beta",
       "email": "beta@example.com",
-      "image": "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
       "location": "Nashik",
+      "image": "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
+      "description": "Local Guide & Street Food Addict",
+      "lat": 18.5204,
+      "lng": 73.8567,
+      "contact": "+91 9823456789",
+      "dob": "1992-04-25",
+      "gender": "Male",
+      "age": 32,
+      "bio": "From hidden food joints to scenic spots, I know them all. Your personal guide to the best flavors and places!",
+      "followers": 1423,
+      "following": 298
+    },
+    {
+      "id": "8",
+      "name": "New User 8",
+      "email": "user8@example.com",
+      "image": "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+      "location": "Pune",
       "description": "Working at bynry.inc",
       "lat": 18.5204,
       "lng": 73.8567

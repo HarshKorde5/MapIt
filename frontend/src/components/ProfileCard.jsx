@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setSelectedProfile } from "../store/profileSlice";
 import { useNavigate } from "react-router-dom";
 
-const ProfileCard = ({ profile}) => {
+const ProfileCard = ({ profile }) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const ProfileCard = ({ profile}) => {
     navigate(`/user-details`);
   }
   return (
-    <div 
+    <div
       onMouseEnter={() => dispatch(setSelectedProfile(profile))}
       onClick={handleClick}
       className="relative bg-gray-100 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 w-80 text-center text-black">
@@ -37,7 +37,7 @@ const ProfileCard = ({ profile}) => {
       <p className="text-gray-600 mt-2 text-sm">{profile.description}</p>
 
       {/* Modern Summary Button - Fixed */}
-      <button 
+      <button
         onClick={handleViewSummary}
         className="mt-6 px-6 py-2 text-white font-semibold tracking-wide rounded-full bg-orange-400 hover:from-indigo-500 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300"
       >
@@ -45,7 +45,7 @@ const ProfileCard = ({ profile}) => {
         🔍 View Summary
       </button>
 
-     
+
     </div>
   );
 };

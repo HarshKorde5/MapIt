@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { 
   FiUser, 
   FiPlus, 
@@ -8,20 +7,29 @@ import {
   FiBell,
   FiMail
 } from "react-icons/fi";
-import { useSelector, useDispatch } from "react-redux";
+
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { fetchProfiles, setSelectedProfile } from "../store/profileSlice.js";
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProfiles } from "../store/profileSlice.js";
 
 
 export default function AdminComponent() {
-    const dispatch = useDispatch();
+
     const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("isAuthenticated");
+        navigate("/");
+    };
+
+    const dispatch = useDispatch();
 
     // Get profiles & selected profile from Redux
     const { profiles, selectedProfile, loading, error } = useSelector((state) => state.profile);
 
-    console.log(profiles)
+    // console.log(profiles)
     //  Fetch profiles once when the component mounts
     useEffect(() => {
         dispatch(fetchProfiles());
@@ -40,6 +48,7 @@ export default function AdminComponent() {
     const [searchTerm, setSearchTerm] = useState("");
 
     const [editingUser, setEditingUser] = useState(null);
+    
     const [editedData, setEditedData] = useState({
         name: "",
         email: "",
@@ -161,7 +170,9 @@ export default function AdminComponent() {
                 <FiPlus className="mr-2" />
                 Add User
             </button>
-            <button className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all">
+            <button 
+            onClick={handleLogout} 
+            className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all">
                 <FiLogOut className="mr-2" />
                 Logout
             </button>
@@ -289,6 +300,9 @@ export default function AdminComponent() {
             </button>
             </motion.div>
         )}
+        
         </div>
+
+        
     );
 }

@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-  Mail, 
-  Facebook, 
-  Instagram, 
-  Home, 
-  Users, 
-  Settings,
+import { useNavigate } from "react-router-dom";
+import {
+  ArrowLeft,
+  Mail,
+  Facebook,
+  Instagram,
   MapPin,
   MessageSquare,
   Linkedin,
@@ -17,36 +16,54 @@ import { useSelector } from "react-redux";
 import MapComponent from "./MapComponent.jsx";
 
 const UserProfileComponent = () => {
-     const profile = useSelector((state) => state.profile.selectedProfile); // Get profile from Redux
-    
-      if (!profile) return <div className="text-center text-xl">Profile not found.</div>;
-    
+  const navigate = useNavigate();
+
+
+  const reduxProfile = useSelector((state) => state.profile.selectedProfile);
+  const [profile, setProfile] = useState(reduxProfile || JSON.parse(localStorage.getItem("selectedProfile")));
+
+  useEffect(() => {
+    if (!reduxProfile) {
+      setProfile(JSON.parse(localStorage.getItem("selectedProfile")));
+    }
+  }, [reduxProfile]);
+
+  if (!profile) return <div className="text-center text-xl">Profile not found.</div>;
+
   // User data
   const userData = {
     name: profile.name,
     title: profile.description,
-    industry: "Technology",
     location: profile.location,
-    bio: `Hi, I'm ${profile.name}. I'm the Co-founder and Head of Design at BB agency. Designer at heart with 8+ years of experience creating human-centered digital products.`,
+    bio: profile.bio,
     avatar: profile.image,
     coverImage: "https://images.unsplash.com/photo-1639762681057-408e52192e55?w=1600",
     social: {
-      email: "adrian@example.com",
-      facebook: "adrian.brewer",
-      instagram: "adrian.designs",
-      linkedin: "adrian-brewer"
+      email: profile.email,
+      facebook: "",
+      instagram: "",
+      linkedin: ""
     },
     stats: {
-      projects: 47,
-      followers: 1286,
-      following: 384
+      followers: profile.followers,
+      following: profile.following
     }
   };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Main Content (75%) */}
+      {/* Main Content left side */}
       <main className="flex-1 p-6">
+
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/home")}
+          className="flex items-center mb-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg shadow hover:bg-gray-300 transition-all"
+        >
+          <ArrowLeft size={20} className="mr-2" />
+          Back
+        </button>
+
         {/* Cover Image with Gradient Overlay */}
         <div className="relative w-full h-48 rounded-xl overflow-hidden shadow-lg">
           <img
@@ -58,7 +75,7 @@ const UserProfileComponent = () => {
         </div>
 
         {/* Profile Section */}
-        <motion.div 
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -77,21 +94,19 @@ const UserProfileComponent = () => {
               <MessageSquare size={16} />
             </div>
           </motion.div>
-          
+
           <div className="flex-1">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">{userData.name}</h2>
-                <p className="text-gray-600">
-                  {userData.title} • {userData.industry}
-                </p>
+                <p className="text-gray-600">{userData.title}</p>
                 <div className="flex items-center mt-1 text-gray-500">
                   <MapPin size={16} className="mr-1" />
                   <span>{userData.location}</span>
                 </div>
               </div>
-              
-              <motion.button 
+
+              <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 className="mt-4 md:mt-0 px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all"
@@ -110,10 +125,8 @@ const UserProfileComponent = () => {
           className="mt-6 bg-white p-6 rounded-xl shadow-lg"
         >
           <h3 className="text-xl font-semibold text-gray-800 mb-4">About Me</h3>
-          <p className="text-gray-600 leading-relaxed">
-            {userData.bio}
-          </p>
-          
+          <p className="text-gray-600 leading-relaxed">{profile.bio}</p>
+
           {/* Stats */}
           <div className="flex justify-between mt-6 pt-4 border-t border-gray-100">
             {Object.entries(userData.stats).map(([key, value]) => (
@@ -126,8 +139,8 @@ const UserProfileComponent = () => {
         </motion.div>
       </main>
 
-      {/* Right Sidebar (25%) */}
-      <motion.aside 
+      {/* Right Sidebar */}
+      <motion.aside
         initial={{ x: 20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -142,11 +155,8 @@ const UserProfileComponent = () => {
             </h3>
             <p className="mt-2 text-gray-600">{profile.location}</p>
             <div className="mt-3 h-40 bg-gray-200 rounded-lg overflow-hidden">
-              {/* Map placeholder */}
               <div className="w-full h-full flex items-center justify-center text-gray-500">
-                
                 <MapComponent lat={profile?.lat || 37.7749} lng={profile?.lng || -122.4194} />
-                    
               </div>
             </div>
           </div>
@@ -163,30 +173,9 @@ const UserProfileComponent = () => {
                 <Mail className="mr-3 text-blue-500" size={18} />
                 <span>{userData.social.email}</span>
               </motion.a>
-              
               <motion.a
                 whileHover={{ x: 5 }}
-                href={`https://facebook.com/${userData.social.facebook}`}
-                target="_blank"
-                className="flex items-center text-gray-700 hover:text-blue-600"
-              >
-                <Facebook className="mr-3 text-blue-500" size={18} />
-                <span>Facebook</span>
-              </motion.a>
-              
-              <motion.a
-                whileHover={{ x: 5 }}
-                href={`https://instagram.com/${userData.social.instagram}`}
-                target="_blank"
-                className="flex items-center text-gray-700 hover:text-blue-600"
-              >
-                <Instagram className="mr-3 text-blue-500" size={18} />
-                <span>Instagram</span>
-              </motion.a>
-              
-              <motion.a
-                whileHover={{ x: 5 }}
-                href={`https://linkedin.com/in/${userData.social.linkedin}`}
+                href={`https://linkedin.com/`}
                 target="_blank"
                 className="flex items-center text-gray-700 hover:text-blue-600"
               >
@@ -202,11 +191,11 @@ const UserProfileComponent = () => {
             <div className="space-y-3">
               <div className="flex items-center text-gray-700">
                 <Globe className="mr-3 text-blue-500" size={18} />
-                <span>adrianbrewer.design</span>
+                <span>{profile.name}.design</span>
               </div>
               <div className="flex items-center text-gray-700">
                 <Phone className="mr-3 text-blue-500" size={18} />
-                <span>+1 (555) 123-4567</span>
+                <span>{profile.contact}</span>
               </div>
             </div>
           </div>
