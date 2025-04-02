@@ -1,18 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  selectedProfile: null,
-};
-
 const profileSlice = createSlice({
   name: "profile",
-  initialState,
+  initialState: {
+    profiles: [], // List of profiles
+    selectedProfile: null, // Store selected profile
+  },
   reducers: {
+    setProfiles: (state, action) => {
+      state.profiles = action.payload;
+    },
     setSelectedProfile: (state, action) => {
       state.selectedProfile = action.payload;
     },
   },
 });
 
-export const { setSelectedProfile } = profileSlice.actions;
+export const { setProfiles, setSelectedProfile } = profileSlice.actions;
 export default profileSlice.reducer;

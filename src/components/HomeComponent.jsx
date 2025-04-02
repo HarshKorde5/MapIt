@@ -60,7 +60,6 @@ function HomeComponent(){
             },
 
     ]);
-    const [hoveredLocation, setHoveredLocation] = useState({ lat: 18.5204, lng: 73.8567 });
 
     const selectedProfile = useSelector((state) => state.profile.selectedProfile);
 
@@ -80,12 +79,24 @@ function HomeComponent(){
                         <div className="flex-1 mx-4 max-w-md">
                             <input type="text" placeholder="Search..." className="w-full p-2 border rounded-md" />
                         </div>
-                        <div className="w-10 h-10 bg-gray-300" >
-                            <img 
+                        <div
+                            className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-300 cursor-pointer"
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                            onClick={() => navigate("/profile-settings")}
+                        >
+                            <img
                                 src="https://img.freepik.com/premium-vector/person-with-green-blue-logo-that-says-name_1076610-66914.jpg"
                                 alt="user settings"
+                                className="w-full h-full object-cover"
                             />
-                            {/* UserSettingsComponent */}
+                            
+                            {isHovered && (
+                                <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-40 bg-white shadow-lg rounded-lg p-2 text-sm">
+                                    <p className="font-medium">View Profile</p>
+                                    <p className="text-gray-600">User Settings</p>
+                                </div>
+                            )}
                         </div>
                     </nav>
 
