@@ -5,18 +5,18 @@ import {
     FiSearch,
     FiSettings,
     FiBell,
-    FiMail
+    FiMail,
+    FiEdit,
+    FiX
 } from "react-icons/fi";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProfiles } from "../store/profileSlice.js";
 
-
 export default function AdminComponent() {
-
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -25,30 +25,15 @@ export default function AdminComponent() {
     };
 
     const dispatch = useDispatch();
-
-    // Get profiles & selected profile from Redux
     const { profiles, selectedProfile, loading, error } = useSelector((state) => state.profile);
 
-    // console.log(profiles)
-    //  Fetch profiles once when the component mounts
     useEffect(() => {
         dispatch(fetchProfiles());
     }, [dispatch]);
 
-
-    useEffect(() => {
-        if (users.length === 0 && profiles.length > 0) {
-            setUsers(profiles);
-        }
-    }, [profiles]);
-
-
     const [users, setUsers] = useState(profiles);
-
     const [searchTerm, setSearchTerm] = useState("");
-
     const [editingUser, setEditingUser] = useState(null);
-
     const [editedData, setEditedData] = useState({
         name: "",
         email: "",
@@ -59,8 +44,11 @@ export default function AdminComponent() {
         lng: "",
     });
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+    useEffect(() => {
+        if (users.length === 0 && profiles.length > 0) {
+            setUsers(profiles);
+        }
+    }, [profiles]);
 
     const addUser = async () => {
         const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
@@ -82,7 +70,7 @@ export default function AdminComponent() {
         })
             .then(response => response.json())
             .then(data => {
-                setUsers([...users, data]);  // Add new user to state
+                setUsers([...users, data]);
             })
             .catch(error => console.error("Error adding user:", error));
     };
@@ -97,14 +85,15 @@ export default function AdminComponent() {
         }
     };
 
-
     const startEditingUser = (user) => {
         setEditingUser(user);
-        setEditedData(user); // Pre-fill form with existing data
+        setEditedData(user);
     };
+
     const handleInputChange = (e) => {
         setEditedData({ ...editedData, [e.target.name]: e.target.value });
     };
+
     const saveEdit = () => {
         fetch(`http://localhost:5000/profiles/${editingUser.id}`, {
             method: "PUT",
@@ -113,25 +102,116 @@ export default function AdminComponent() {
         })
             .then(response => response.json())
             .then(data => {
-                setUsers(users.map(user => (user.id === editingUser.id ? data : user))); // Update local state
-                setEditingUser(null); // Close form after saving
+                setUsers(users.map(user => (user.id === editingUser.id ? data : user)));
+                setEditingUser(null);
             })
             .catch(error => console.error("Error updating user:", error));
     };
 
-
     const cancelEdit = () => {
-        setEditingUser(null); // Close form without saving
+        setEditingUser(null);
     };
-
 
     const filteredUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+
     return (
         <div className="min-h-screen bg-gray-50 p-6">
+            {/* Edit User Modal */}
+            <AnimatePresence>
+    {editingUser && (
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-gray-100 bg-opacity-70 backdrop-blur-lg z-50 flex items-center justify-center p-4"
+        >
+            {/* Keep rest of your existing modal content exactly the same */}
+            <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 relative"
+            >
+                <button
+                    onClick={cancelEdit}
+                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                >
+                    <FiX size={24} />
+                </button>
+
+                <h2 className="text-2xl font-bold mb-6">Edit User</h2>
+                            
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={editedData.name}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={editedData.email}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={editedData.location}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea
+                                        name="description"
+                                        value={editedData.description}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        rows={3}
+                                    />
+                                </div>
+
+                                <div className="flex justify-end space-x-3 pt-4">
+                                    <button
+                                        onClick={cancelEdit}
+                                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={saveEdit}
+                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                    >
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
             {/* Navbar */}
             <motion.div
                 initial={{ y: -20, opacity: 0 }}
@@ -182,7 +262,6 @@ export default function AdminComponent() {
             {/* User List */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredUsers.map((user, index) => (
-
                     <motion.div
                         key={user.id}
                         initial={{ opacity: 0, y: 20 }}
@@ -191,96 +270,40 @@ export default function AdminComponent() {
                         whileHover={{ y: -5 }}
                         className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
                     >
-                        {editingUser?.id === user.id ? (
-                            // Edit Form
-                            <div className="space-y-3">
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={editedData.name}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={editedData.email}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="location"
-                                    value={editedData.location}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="image"
-                                    value={editedData.image}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="lat"
-                                    value={editedData.lat}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="lng"
-                                    value={editedData.lng}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <textarea
-                                    name="description"
-                                    value={editedData.description}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <div className="flex space-x-2">
-                                    <button onClick={saveEdit} className="px-4 py-2 bg-green-600 text-white rounded">
-                                        Save
-                                    </button>
-                                    <button onClick={cancelEdit} className="px-4 py-2 bg-gray-400 text-white rounded">
-                                        Cancel
-                                    </button>
-                                </div>
+                        <div className="flex items-center mb-4">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold mr-4">
+                                <img src={user.image} alt={user.name} className="w-full h-full rounded-full object-cover" />
                             </div>
-                        ) : (
-                            <>
-                                <div className="flex items-center mb-4">
-                                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold mr-4">
-                                        <img src={user.image} />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-lg">{user.name}</h3>
-                                        <p className="text-gray-500 text-sm">{user.email}</p>
-                                    </div>
-                                </div>
-                                <div className="flex justify-between text-sm mb-4">
-                                    <span className="text-gray-500">Location:</span>
-                                    <span className="font-medium text-gray-700">
-                                        {user.location}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-gray-500">Description:</span>
-                                    <span className="text-gray-700">{user.description}</span>
-                                </div>
-                                <div className="mt-4 pt-4 border-t border-gray-100 flex space-x-2">
-                                    <button onClick={() => startEditingUser(user)} className="flex-1 py-2 text-sm bg-blue-50 text-blue-600 rounded hover:bg-blue-100">
-                                        Edit
-                                    </button>
-                                    <button onClick={() => removeUser(user.id)} className="flex-1 py-2 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100">
-                                        Remove
-                                    </button>
-                                </div></>
-                        )}
+                            <div>
+                                <h3 className="font-semibold text-lg">{user.name}</h3>
+                                <p className="text-gray-500 text-sm">{user.email}</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-between text-sm mb-4">
+                            <span className="text-gray-500">Location:</span>
+                            <span className="font-medium text-gray-700">
+                                {user.location}
+                            </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Description:</span>
+                            <span className="text-gray-700">{user.description}</span>
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-gray-100 flex space-x-2">
+                            <button 
+                                onClick={() => startEditingUser(user)} 
+                                className="flex-1 py-2 text-sm bg-blue-50 text-blue-600 rounded hover:bg-blue-100 flex items-center justify-center"
+                            >
+                                <FiEdit className="mr-1" />
+                                Edit
+                            </button>
+                            <button 
+                                onClick={() => removeUser(user.id)} 
+                                className="flex-1 py-2 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100"
+                            >
+                                Remove
+                            </button>
+                        </div>
                     </motion.div>
                 ))}
             </div>
@@ -300,9 +323,6 @@ export default function AdminComponent() {
                     </button>
                 </motion.div>
             )}
-
         </div>
-
-
     );
 }
