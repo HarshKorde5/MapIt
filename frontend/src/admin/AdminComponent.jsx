@@ -49,14 +49,23 @@ export default function AdminComponent() {
 
     const [editingUser, setEditingUser] = useState(null);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [editedData, setEditedData] = useState({
         name: "",
         email: "",
         location: "",
         description: "",
         image: "",
-        lat: "",
-        lng: "",
+        lat: 18.5204,
+        lng: 73.8567,
+        bio: "",
+        followers: 0,
+        following: 0,
+        contact: "",
+        dob: "",
+        gender: "",
+        age: 0,
     });
 
     if (loading) return <p>Loading...</p>;
@@ -72,7 +81,14 @@ export default function AdminComponent() {
             location: `Pune`,
             description: `Working at bynry.inc`,
             lat: 18.5204,
-            lng: 73.8567
+            lng: 73.8567,
+            bio: `Exploring the world one bite at a time. Passionate about street food and hidden travel gems.`,
+            followers: 1532,
+            following: 210,
+            contact: "+91 9876543210",
+            dob: "1990-05-15",
+            gender: "Male",
+            age: 34,
         };
 
         fetch("http://localhost:5000/profiles", {
@@ -100,10 +116,16 @@ export default function AdminComponent() {
 
     const startEditingUser = (user) => {
         setEditingUser(user);
-        setEditedData(user); // Pre-fill form with existing data
+        setEditedData(user);
+        setIsModalOpen(true)
     };
     const handleInputChange = (e) => {
-        setEditedData({ ...editedData, [e.target.name]: e.target.value });
+        const { name, value, type } = e.target;
+
+        // Convert numeric fields to numbers
+        const newValue = type === "number" ? Number(value) : value;
+        setEditedData({ ...editedData, [name]: newValue });
+
     };
     const saveEdit = () => {
         fetch(`http://localhost:5000/profiles/${editingUser.id}`, {
@@ -121,6 +143,7 @@ export default function AdminComponent() {
 
 
     const cancelEdit = () => {
+        setIsModalOpen(false);
         setEditingUser(null); // Close form without saving
     };
 
@@ -191,99 +214,69 @@ export default function AdminComponent() {
                         whileHover={{ y: -5 }}
                         className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
                     >
-                        {editingUser?.id === user.id ? (
-                            // Edit Form
-                            <div className="space-y-3">
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={editedData.name}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={editedData.email}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="location"
-                                    value={editedData.location}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="image"
-                                    value={editedData.image}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="lat"
-                                    value={editedData.lat}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <input
-                                    type="text"
-                                    name="lng"
-                                    value={editedData.lng}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <textarea
-                                    name="description"
-                                    value={editedData.description}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                />
-                                <div className="flex space-x-2">
-                                    <button onClick={saveEdit} className="px-4 py-2 bg-green-600 text-white rounded">
-                                        Save
-                                    </button>
-                                    <button onClick={cancelEdit} className="px-4 py-2 bg-gray-400 text-white rounded">
-                                        Cancel
-                                    </button>
+                        <>
+                            <div className="flex items-center mb-4">
+                                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold mr-4">
+                                    <img src={user.image} />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-lg">{user.name}</h3>
+                                    <p className="text-gray-500 text-sm">{user.email}</p>
                                 </div>
                             </div>
-                        ) : (
-                            <>
-                                <div className="flex items-center mb-4">
-                                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold mr-4">
-                                        <img src={user.image} />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-lg">{user.name}</h3>
-                                        <p className="text-gray-500 text-sm">{user.email}</p>
-                                    </div>
-                                </div>
-                                <div className="flex justify-between text-sm mb-4">
-                                    <span className="text-gray-500">Location:</span>
-                                    <span className="font-medium text-gray-700">
-                                        {user.location}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-gray-500">Description:</span>
-                                    <span className="text-gray-700">{user.description}</span>
-                                </div>
-                                <div className="mt-4 pt-4 border-t border-gray-100 flex space-x-2">
-                                    <button onClick={() => startEditingUser(user)} className="flex-1 py-2 text-sm bg-blue-50 text-blue-600 rounded hover:bg-blue-100">
-                                        Edit
-                                    </button>
-                                    <button onClick={() => removeUser(user.id)} className="flex-1 py-2 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100">
-                                        Remove
-                                    </button>
-                                </div></>
-                        )}
+                            <div className="flex justify-between text-sm mb-4">
+                                <span className="text-gray-500">Location:</span>
+                                <span className="font-medium text-gray-700">
+                                    {user.location}
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">Description:</span>
+                                <span className="text-gray-700">{user.description}</span>
+                            </div>
+                            <div className="mt-4 pt-4 border-t border-gray-100 flex space-x-2">
+                                <button onClick={() => startEditingUser(user)} className="flex-1 py-2 text-sm bg-blue-50 text-blue-600 rounded hover:bg-blue-100">
+                                    Edit
+                                </button>
+                                <button onClick={() => removeUser(user.id)} className="flex-1 py-2 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100">
+                                    Remove
+                                </button>
+                            </div>
+                        </>
+
+
                     </motion.div>
                 ))}
             </div>
+
+
+            {editingUser && isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-none bg-opacity-50">
+                    <div className="bg-gray-100 p-6 overflow-auto h-[70vh] rounded-lg shadow-xl w-1/3">
+                        <h2 className="text-xl font-bold mb-4">Edit User</h2>
+                        {Object.keys(editingUser).map((key) => {
+                            const isNumberField = ["following", "followers", "age", "lng", "lat"].includes(key);
+                            return (
+                                <div key={key} className="mb-2">
+                                    <label className="block capitalize">{key.replace("_", " ")} : </label>
+                                    <input
+                                        type={isNumberField ? "number" : "text"}
+                                        name={key}
+                                        value={editedData[key] || 0}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border rounded"
+                                    />
+                                </div>
+                            );
+                        })}
+                        <div className="flex justify-end mt-4">
+                            <button onClick={saveEdit} className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+                            <button onClick={() => { cancelEdit() }} className="ml-2 px-4 py-2 bg-gray-400 text-white rounded">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
             {filteredUsers.length === 0 && (
                 <motion.div
