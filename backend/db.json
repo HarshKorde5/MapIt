@@ -122,16 +122,6 @@
       "bio": "From hidden food joints to scenic spots, I know them all. Your personal guide to the best flavors and places!",
       "followers": 1423,
       "following": 298
-    },
-    {
-      "id": "8",
-      "name": "New User 8",
-      "email": "user8@example.com",
-      "image": "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-      "location": "Pune",
-      "description": "Working at bynry.inc",
-      "lat": 18.5204,
-      "lng": 73.8567
     }
   ]
 }

@@ -98,7 +98,7 @@ function HomeComponent() {
                                 {/* Reset Button */}
                                 <button
                                     className="mt-3 px-4 py-2 bg-gray-300 rounded-md w-full"
-                                    onClick={() => setFilters({ location: "/" })}
+                                    onClick={() => setFilters({ location: "" })}
                                 >
                                     Reset Filters
                                 </button>
